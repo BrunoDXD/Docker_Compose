@@ -1,0 +1,25 @@
+services:
+  db:
+    build: ./InfraBD
+    environment:
+      POSTGRES_DB: escola
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build: ./app
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/escola
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./app:/app
+
+volumes:
+  db_data:
