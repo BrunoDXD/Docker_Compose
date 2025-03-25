@@ -21,5 +21,15 @@ services:
     volumes:
       - ./app:/app
 
+  test:
+    build: ./app
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/escola
+    command: ["pytest", "--disable-warnings"]
+    volumes:
+      - ./app:/app
+
 volumes:
   db_data:
