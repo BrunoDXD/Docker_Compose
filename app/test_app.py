@@ -1,7 +1,6 @@
 import pytest
-from models import db, Aluno
+from models import db, Turma
 from app import app
-from test_data import test_alunos
 
 @pytest.fixture
 def client():
@@ -9,36 +8,29 @@ def client():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@db:5432/escola'
     with app.test_client() as client:
         with app.app_context():
-            db.create_all()
-            for aluno in test_alunos:
-                db.session.add(Aluno(**aluno))
-            db.session.commit()
-        yield client
-        with app.app_context():
-            db.drop_all()
+            yield client
 
-@pytest.mark.parametrize("aluno_id, expected_nome", [(aluno['aluno_id'], aluno['nome']) for aluno in test_alunos])
-def test_listar_alunos(client, aluno_id, expected_nome):
-    response = client.get('/alunos')
+def test_listar_turmas(client):
+    response = client.get('/turmas')
     assert response.status_code == 200
-    assert any(aluno['aluno_id'] == aluno_id and aluno['nome'] == expected_nome for aluno in response.json)
+    assert len(response.json) > 0  # Verifica se há pelo menos uma turma no banco de dados
 
-def test_cadastrar_aluno(client):
-    novo_aluno = {'aluno_id': 'A011', 'nome': 'João', 'endereco': 'Rua K, 2425', 'cidade': 'Campinas', 'estado': 'SP', 'cep': '11000-000', 'pais': 'Brasil', 'telefone': '1212-1212'}
-    response = client.post('/alunos', json=novo_aluno)
+def test_cadastrar_turma(client):
+    nova_turma = {'nome_turma': 'Turma 3', 'id_professor': 1, 'horario': '09:00 - 13:00'}
+    response = client.post('/turmas', json=nova_turma)
     assert response.status_code == 201
-    assert response.json['nome'] == 'João'
-    assert response.json['endereco'] == 'Rua K, 2425'
+    assert response.json['nome_turma'] == 'Turma 3'
+    assert response.json['horario'] == '09:00 - 13:00'
 
-@pytest.mark.parametrize("aluno_id, dados_alterados", [('A001', {'nome': 'João Silva Alterado'})])
-def test_alterar_aluno(client, aluno_id, dados_alterados):
-    response = client.put(f'/alunos/{aluno_id}', json=dados_alterados)
+def test_alterar_turma(client):
+    dados_alterados = {'nome_turma': 'Turma 1 Alterada', 'id_professor': 1, 'horario': '10:00 - 14:00'}
+    response = client.put('/turmas/1', json=dados_alterados)
     assert response.status_code == 200
-    assert response.json['nome'] == dados_alterados['nome']
+    assert response.json['nome_turma'] == 'Turma 1 Alterada'
+    assert response.json['horario'] == '10:00 - 14:00'
 
-@pytest.mark.parametrize("aluno_id", ['A001'])
-def test_excluir_aluno(client, aluno_id):
-    response = client.delete(f'/alunos/{aluno_id}')
+def test_excluir_turma(client):
+    response = client.delete('/turmas/1')
     assert response.status_code == 204
-    response = client.get('/alunos')
-    assert not any(aluno['aluno_id'] == aluno_id for aluno in response.json)
+    response = client.get('/turmas')
+    assert not any(turma['id_turma'] == 1 for turma in response.json)

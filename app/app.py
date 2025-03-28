@@ -1,42 +1,41 @@
-
 from flask import Flask, request, jsonify
-from models import db, Aluno
+from models import db, Turma
 from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
 
-@app.route('/alunos', methods=['GET'])
-def listar_alunos():
-    alunos = Aluno.query.all()
-    return jsonify([aluno.to_dict() for aluno in alunos])
+@app.route('/turmas', methods=['GET'])
+def listar_turmas():
+    turmas = Turma.query.all()
+    return jsonify([turma.to_dict() for turma in turmas])
 
-@app.route('/alunos', methods=['POST'])
-def cadastrar_aluno():
+@app.route('/turmas', methods=['POST'])
+def cadastrar_turma():
     dados = request.json
-    novo_aluno = Aluno(**dados)
-    db.session.add(novo_aluno)
+    nova_turma = Turma(**dados)
+    db.session.add(nova_turma)
     db.session.commit()
-    return jsonify(novo_aluno.to_dict()), 201
+    return jsonify(nova_turma.to_dict()), 201
 
-@app.route('/alunos/<aluno_id>', methods=['PUT'])
-def alterar_aluno(aluno_id):
+@app.route('/turmas/<turma_id>', methods=['PUT'])
+def alterar_turma(turma_id):
     dados = request.json
-    aluno = Aluno.query.get(aluno_id)
-    if not aluno:
-        return jsonify({'error': 'Aluno não encontrado'}), 404
+    turma = Turma.query.get(turma_id)
+    if not turma:
+        return jsonify({'error': 'Turma não encontrada'}), 404
     for key, value in dados.items():
-        setattr(aluno, key, value)
+        setattr(turma, key, value)
     db.session.commit()
-    return jsonify(aluno.to_dict())
+    return jsonify(turma.to_dict())
 
-@app.route('/alunos/<aluno_id>', methods=['DELETE'])
-def excluir_aluno(aluno_id):
-    aluno = Aluno.query.get(aluno_id)
-    if not aluno:
-        return jsonify({'error': 'Aluno não encontrado'}), 404
-    db.session.delete(aluno)
+@app.route('/turmas/<turma_id>', methods=['DELETE'])
+def excluir_turma(turma_id):
+    turma = Turma.query.get(turma_id)
+    if not turma:
+        return jsonify({'error': 'Turma não encontrada'}), 404
+    db.session.delete(turma)
     db.session.commit()
     return '', 204
 
