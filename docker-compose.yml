@@ -72,6 +72,15 @@ services:
     volumes:
       - ./app:/app
 
+  log_service:
+    image: python:3.9
+    container_name: log_service
+    volumes:
+      - ./logs:/logs
+    command: ["python", "/logs/logging_service.py"]
+    networks:
+      - monitoring_network
+
 volumes:
   db_data:
   grafana_data:
@@ -79,4 +88,3 @@ volumes:
 networks:
   monitoring_network:
     driver: bridge
-  db_data:
