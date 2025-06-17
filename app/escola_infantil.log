@@ -1,14 +1,24 @@
-2025-05-05 23:59:49,402 - ERROR - ERROR: Falha ao listar turmas - (psycopg2.OperationalError) could not translate host name "db" to address: Name or service not known
-
-(Background on this error at: https://sqlalche.me/e/14/e3q8)
-2025-05-05 23:59:49,414 - INFO - 172.18.0.1 - - [05/May/2025 23:59:49] "[35m[1mGET /turmas HTTP/1.1[0m" 500 -
-2025-05-05 23:59:51,179 - INFO - 172.18.0.1 - - [05/May/2025 23:59:51] "[33mPUT /alunos/A011 HTTP/1.1[0m" 404 -
-2025-05-05 23:59:52,398 - INFO - 172.18.0.1 - - [05/May/2025 23:59:52] "[33mPUT /alunos/A011 HTTP/1.1[0m" 404 -
-2025-05-05 23:59:57,943 - INFO - 172.18.0.1 - - [05/May/2025 23:59:57] "[33mPUT /alunos/A010 HTTP/1.1[0m" 404 -
-2025-05-05 23:59:58,537 - INFO - 172.18.0.1 - - [05/May/2025 23:59:58] "[33mPUT /alunos/A010 HTTP/1.1[0m" 404 -
-2025-05-05 23:59:59,180 - INFO - 172.18.0.1 - - [05/May/2025 23:59:59] "[33mPUT /alunos/A010 HTTP/1.1[0m" 404 -
-2025-05-06 00:00:01,198 - INFO - 172.18.0.1 - - [06/May/2025 00:00:01] "[33mDELETE /alunos/A011 HTTP/1.1[0m" 404 -
-2025-05-06 00:00:08,233 - ERROR - ERROR: Falha ao listar turmas - (psycopg2.OperationalError) could not translate host name "db" to address: Name or service not known
-
-(Background on this error at: https://sqlalche.me/e/14/e3q8)
-2025-05-06 00:00:08,237 - INFO - 172.18.0.1 - - [06/May/2025 00:00:08] "[35m[1mGET /turmas HTTP/1.1[0m" 500 -
+2025-06-16 23:31:06,071 - INFO -  * Restarting with stat
+2025-06-16 23:31:07,252 - INFO - Tabelas do banco de dados criadas com sucesso
+2025-06-16 23:31:07,284 - WARNING -  * Debugger is active!
+2025-06-16 23:31:07,288 - INFO -  * Debugger PIN: 202-986-392
+2025-06-16 23:33:31,310 - INFO -  * Detected change in '/app/app.py', reloading
+2025-06-16 23:33:31,459 - INFO -  * Restarting with stat
+2025-06-16 23:33:32,531 - INFO - Tabelas do banco de dados criadas com sucesso
+2025-06-16 23:33:32,595 - WARNING -  * Debugger is active!
+2025-06-16 23:33:32,598 - INFO -  * Debugger PIN: 202-986-392
+2025-06-16 23:33:47,903 - INFO - 172.19.0.1 - - [16/Jun/2025 23:33:47] "[33mGET /professores_view HTTP/1.1[0m" 404 -
+2025-06-16 23:33:48,477 - INFO - 172.19.0.1 - - [16/Jun/2025 23:33:48] "[33mGET /professores_view HTTP/1.1[0m" 404 -
+2025-06-16 23:33:48,662 - INFO - 172.19.0.1 - - [16/Jun/2025 23:33:48] "[33mGET /professores_view HTTP/1.1[0m" 404 -
+2025-06-16 23:33:56,991 - INFO - Tabelas do banco de dados criadas com sucesso
+2025-06-16 23:33:57,044 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.19.0.3:5000
+2025-06-16 23:33:57,046 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-16 23:33:57,049 - INFO -  * Restarting with stat
+2025-06-16 23:33:58,148 - INFO - Tabelas do banco de dados criadas com sucesso
+2025-06-16 23:33:58,197 - WARNING -  * Debugger is active!
+2025-06-16 23:33:58,201 - INFO -  * Debugger PIN: 880-290-622
+2025-06-16 23:34:06,869 - INFO - 172.19.0.1 - - [16/Jun/2025 23:34:06] "GET / HTTP/1.1" 200 -
+2025-06-16 23:34:20,310 - INFO - 172.19.0.1 - - [16/Jun/2025 23:34:20] "GET / HTTP/1.1" 200 -

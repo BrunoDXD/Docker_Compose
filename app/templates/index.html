@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão - Escola Infantil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .menu {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .menu a {
+            margin: 0 10px;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .menu a:hover {
+            background-color: #2980b9;
+        }
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .card {
+            width: 30%;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .card h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .card p {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3498db;
+        }
+        .card a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .welcome {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de Gestão - Escola Infantil</h1>
+        
+        <div class="menu">
+            <a href="/">Início</a>
+            <a href="/turmas_view">Turmas</a>
+            <a href="/professores_view">Professores</a>
+            <a href="/alunos_view">Alunos</a>
+            <a href="/pagamentos_view">Pagamentos</a>
+            <a href="/atividades_view">Atividades</a>
+        </div>
+        
+        <div class="welcome">
+            <h2>Bem-vindo ao Sistema de Gestão da Escola Infantil</h2>
+            <p>Este sistema permite gerenciar turmas, professores e alunos da escola.</p>
+            <p>Utilize o menu acima para navegar entre as diferentes seções do sistema.</p>
+        </div>
+        
+        <div class="dashboard">
+            <div class="card">
+                <h3>Total de Turmas</h3>
+                <p>{{ total_turmas }}</p>
+                <a href="/turmas_view">Ver Turmas</a>
+            </div>
+            
+            <div class="card">
+                <h3>Total de Professores</h3>
+                <p>{{ total_professores }}</p>
+                <a href="/professores_view">Ver Professores</a>
+            </div>
+            
+            <div class="card">
+                <h3>Total de Alunos</h3>
+                <p>{{ total_alunos }}</p>
+                <a href="#">Ver Alunos</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
