@@ -1,14 +1,15 @@
-2025-05-05 23:59:49,402 - ERROR - ERROR: Falha ao listar turmas - (psycopg2.OperationalError) could not translate host name "db" to address: Name or service not known
+2025-06-17 23:02:36,893 - ERROR - ERROR: Falha ao listar turmas - (psycopg2.OperationalError) could not translate host name "db" to address: Name or service not known
 
 (Background on this error at: https://sqlalche.me/e/14/e3q8)
-2025-05-05 23:59:49,414 - INFO - 172.18.0.1 - - [05/May/2025 23:59:49] "[35m[1mGET /turmas HTTP/1.1[0m" 500 -
-2025-05-05 23:59:51,179 - INFO - 172.18.0.1 - - [05/May/2025 23:59:51] "[33mPUT /alunos/A011 HTTP/1.1[0m" 404 -
-2025-05-05 23:59:52,398 - INFO - 172.18.0.1 - - [05/May/2025 23:59:52] "[33mPUT /alunos/A011 HTTP/1.1[0m" 404 -
-2025-05-05 23:59:57,943 - INFO - 172.18.0.1 - - [05/May/2025 23:59:57] "[33mPUT /alunos/A010 HTTP/1.1[0m" 404 -
-2025-05-05 23:59:58,537 - INFO - 172.18.0.1 - - [05/May/2025 23:59:58] "[33mPUT /alunos/A010 HTTP/1.1[0m" 404 -
-2025-05-05 23:59:59,180 - INFO - 172.18.0.1 - - [05/May/2025 23:59:59] "[33mPUT /alunos/A010 HTTP/1.1[0m" 404 -
-2025-05-06 00:00:01,198 - INFO - 172.18.0.1 - - [06/May/2025 00:00:01] "[33mDELETE /alunos/A011 HTTP/1.1[0m" 404 -
-2025-05-06 00:00:08,233 - ERROR - ERROR: Falha ao listar turmas - (psycopg2.OperationalError) could not translate host name "db" to address: Name or service not known
-
-(Background on this error at: https://sqlalche.me/e/14/e3q8)
-2025-05-06 00:00:08,237 - INFO - 172.18.0.1 - - [06/May/2025 00:00:08] "[35m[1mGET /turmas HTTP/1.1[0m" 500 -
+2025-06-17 23:02:36,995 - INFO - 172.19.0.1 - - [17/Jun/2025 23:02:36] "[35m[1mGET /turmas HTTP/1.1[0m" 500 -
+2025-06-17 23:08:59,841 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.18.0.7:5000
+2025-06-17 23:08:59,843 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-17 23:10:32,027 - INFO - READ: Listagem de todas as turmas solicitada.
+2025-06-17 23:10:32,033 - INFO - 172.18.0.1 - - [17/Jun/2025 23:10:32] "GET /turmas HTTP/1.1" 200 -
+2025-06-17 23:10:33,029 - INFO - READ: Listagem de todas as turmas solicitada.
+2025-06-17 23:10:33,033 - INFO - 172.18.0.1 - - [17/Jun/2025 23:10:33] "GET /turmas HTTP/1.1" 200 -
+2025-06-17 23:11:40,521 - INFO - READ: Listagem de todas as turmas solicitada.
+2025-06-17 23:11:40,527 - INFO - 172.18.0.1 - - [17/Jun/2025 23:11:40] "GET /turmas HTTP/1.1" 200 -

@@ -153,7 +153,7 @@ INSERT INTO Atividade_Aluno (id_atividade, id_aluno) VALUES
 
 INSERT INTO Usuario (login, senha, nivel_acesso, id_professor) VALUES
 ('usuarioA', 'senhaA', 'administrador', NULL),
-('usuarioB', 'C', 'senhaC', 'professor', 1),
+('usuarioB', 'senhaB', 'professor', 1),
 ('usuarioD', 'senhaD', 'professor', 2),
 ('usuarioE', 'senhaE', 'professor', 3),
 ('usuarioF', 'senhaF', 'professor', 4),

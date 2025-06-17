@@ -61,6 +61,8 @@ services:
       - "5000:5000"
     volumes:
       - ./app:/app
+    networks:
+      - monitoring_network
 
   test:
     build: ./app
@@ -71,6 +73,8 @@ services:
     command: ["pytest", "--disable-warnings"]
     volumes:
       - ./app:/app
+    networks:
+      - monitoring_network
 
   log_service:
     image: python:3.9
