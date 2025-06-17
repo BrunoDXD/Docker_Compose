@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Atividade - Escola Infantil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .menu {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .menu a {
+            margin: 0 10px;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .menu a:hover {
+            background-color: #2980b9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 100px;
+        }
+        .checkbox-group {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .checkbox-item {
+            margin-bottom: 5px;
+        }
+        .btn {
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-success {
+            background-color: #2ecc71;
+        }
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Editar Atividade</h1>
+        
+        <div class="menu">
+            <a href="/">Início</a>
+            <a href="/turmas_view">Turmas</a>
+            <a href="/professores_view">Professores</a>
+            <a href="/alunos_view">Alunos</a>
+            <a href="/pagamentos_view">Pagamentos</a>
+            <a href="/atividades_view">Atividades</a>
+        </div>
+        
+        <form method="POST">
+            <div class="form-group">
+                <label for="descricao">Descrição:</label>
+                <textarea id="descricao" name="descricao" required>{{ atividade.descricao }}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="data_realizacao">Data de Realização:</label>
+                <input type="date" id="data_realizacao" name="data_realizacao" value="{{ atividade.data_realizacao }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Alunos Participantes:</label>
+                <div class="checkbox-group">
+                    {% for aluno in alunos %}
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="aluno_{{ aluno.id_aluno }}" name="alunos" value="{{ aluno.id_aluno }}" {% if aluno.id_aluno in alunos_selecionados %}checked{% endif %}>
+                        <label for="aluno_{{ aluno.id_aluno }}">{{ aluno.nome_completo }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button type="submit" class="btn btn-success">Salvar</button>
+                <a href="/atividades_view" class="btn btn-danger">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

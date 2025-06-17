@@ -1,15 +1,9 @@
-2025-06-17 23:02:36,893 - ERROR - ERROR: Falha ao listar turmas - (psycopg2.OperationalError) could not translate host name "db" to address: Name or service not known
-
-(Background on this error at: https://sqlalche.me/e/14/e3q8)
-2025-06-17 23:02:36,995 - INFO - 172.19.0.1 - - [17/Jun/2025 23:02:36] "[35m[1mGET /turmas HTTP/1.1[0m" 500 -
-2025-06-17 23:08:59,841 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5000
- * Running on http://172.18.0.7:5000
-2025-06-17 23:08:59,843 - INFO - [33mPress CTRL+C to quit[0m
-2025-06-17 23:10:32,027 - INFO - READ: Listagem de todas as turmas solicitada.
-2025-06-17 23:10:32,033 - INFO - 172.18.0.1 - - [17/Jun/2025 23:10:32] "GET /turmas HTTP/1.1" 200 -
-2025-06-17 23:10:33,029 - INFO - READ: Listagem de todas as turmas solicitada.
-2025-06-17 23:10:33,033 - INFO - 172.18.0.1 - - [17/Jun/2025 23:10:33] "GET /turmas HTTP/1.1" 200 -
-2025-06-17 23:11:40,521 - INFO - READ: Listagem de todas as turmas solicitada.
-2025-06-17 23:11:40,527 - INFO - 172.18.0.1 - - [17/Jun/2025 23:11:40] "GET /turmas HTTP/1.1" 200 -
+2025-06-17 23:48:39,168 - INFO - DELETE: Pagamento com ID 11 removido com sucesso via interface web.
+2025-06-17 23:48:39,207 - INFO - 172.18.0.1 - - [17/Jun/2025 23:48:39] "[32mGET /pagamentos/11/delete HTTP/1.1[0m" 302 -
+2025-06-17 23:48:39,227 - INFO - 172.18.0.1 - - [17/Jun/2025 23:48:39] "GET /pagamentos_view HTTP/1.1" 200 -
+2025-06-17 23:48:40,570 - INFO - 172.18.0.1 - - [17/Jun/2025 23:48:40] "GET /atividades_view HTTP/1.1" 200 -
+2025-06-17 23:48:43,141 - INFO - 172.18.0.1 - - [17/Jun/2025 23:48:43] "[33mGET /atividades/1/alunos HTTP/1.1[0m" 404 -
+2025-06-17 23:48:54,279 - INFO - 172.18.0.1 - - [17/Jun/2025 23:48:54] "GET /atividades/nova HTTP/1.1" 200 -
+2025-06-17 23:49:07,686 - INFO - CREATE: Atividade teste inserida com sucesso via formulário.
+2025-06-17 23:49:07,688 - INFO - 172.18.0.1 - - [17/Jun/2025 23:49:07] "[32mPOST /atividades/nova HTTP/1.1[0m" 302 -
+2025-06-17 23:49:07,709 - INFO - 172.18.0.1 - - [17/Jun/2025 23:49:07] "GET /atividades_view HTTP/1.1" 200 -

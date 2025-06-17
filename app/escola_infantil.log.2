@@ -1,24 +1,18 @@
-2025-05-05 23:54:40,898 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5000
- * Running on http://172.18.0.3:5000
-2025-05-05 23:54:40,906 - INFO - [33mPress CTRL+C to quit[0m
-2025-05-05 23:57:00,481 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5000
- * Running on http://172.18.0.2:5000
-2025-05-05 23:57:00,484 - INFO - [33mPress CTRL+C to quit[0m
-2025-05-05 23:57:27,635 - ERROR - ERROR: Falha ao listar turmas - (psycopg2.OperationalError) could not translate host name "db" to address: Name or service not known
-
-(Background on this error at: https://sqlalche.me/e/14/e3q8)
-2025-05-05 23:57:27,637 - INFO - 172.18.0.1 - - [05/May/2025 23:57:27] "[35m[1mGET /turmas HTTP/1.1[0m" 500 -
-2025-05-05 23:59:19,023 - ERROR - ERROR: Falha ao listar turmas - (psycopg2.OperationalError) could not translate host name "db" to address: Name or service not known
-
-(Background on this error at: https://sqlalche.me/e/14/e3q8)
-2025-05-05 23:59:19,028 - INFO - 172.18.0.1 - - [05/May/2025 23:59:19] "[35m[1mGET /turmas HTTP/1.1[0m" 500 -
-2025-05-05 23:59:38,138 - ERROR - ERROR: Falha ao listar turmas - (psycopg2.OperationalError) could not translate host name "db" to address: Name or service not known
-
-(Background on this error at: https://sqlalche.me/e/14/e3q8)
-2025-05-05 23:59:38,139 - INFO - 172.18.0.1 - - [05/May/2025 23:59:38] "[35m[1mGET /turmas HTTP/1.1[0m" 500 -
-2025-05-05 23:59:42,533 - INFO - 172.18.0.1 - - [05/May/2025 23:59:42] "[33mGET /turma HTTP/1.1[0m" 404 -
-2025-05-05 23:59:43,478 - INFO - 172.18.0.1 - - [05/May/2025 23:59:43] "[33mGET /turma HTTP/1.1[0m" 404 -
+2025-06-17 23:46:54,180 - INFO - 172.18.0.1 - - [17/Jun/2025 23:46:54] "[32mGET /alunos/11/delete HTTP/1.1[0m" 302 -
+2025-06-17 23:46:54,232 - INFO - 172.18.0.1 - - [17/Jun/2025 23:46:54] "GET /alunos_view HTTP/1.1" 200 -
+2025-06-17 23:47:00,311 - INFO - 172.18.0.1 - - [17/Jun/2025 23:47:00] "GET /professores_view HTTP/1.1" 200 -
+2025-06-17 23:47:01,499 - INFO - 172.18.0.1 - - [17/Jun/2025 23:47:01] "GET /professores/novo HTTP/1.1" 200 -
+2025-06-17 23:47:10,768 - INFO - CREATE: Professor teste inserido com sucesso via formulário.
+2025-06-17 23:47:10,770 - INFO - 172.18.0.1 - - [17/Jun/2025 23:47:10] "[32mPOST /professores/novo HTTP/1.1[0m" 302 -
+2025-06-17 23:47:10,780 - INFO - 172.18.0.1 - - [17/Jun/2025 23:47:10] "GET /professores_view HTTP/1.1" 200 -
+2025-06-17 23:47:13,250 - INFO - 172.18.0.1 - - [17/Jun/2025 23:47:13] "GET /professores/11/edit HTTP/1.1" 200 -
+2025-06-17 23:47:17,563 - INFO - UPDATE: Professor com ID 11 atualizado com sucesso via formulário.
+2025-06-17 23:47:17,566 - INFO - 172.18.0.1 - - [17/Jun/2025 23:47:17] "[32mPOST /professores/11/edit HTTP/1.1[0m" 302 -
+2025-06-17 23:47:17,579 - INFO - 172.18.0.1 - - [17/Jun/2025 23:47:17] "GET /professores_view HTTP/1.1" 200 -
+2025-06-17 23:47:21,085 - INFO - DELETE: Professor com ID 11 removido com sucesso via interface web.
+2025-06-17 23:47:21,087 - INFO - 172.18.0.1 - - [17/Jun/2025 23:47:21] "[32mGET /professores/11/delete HTTP/1.1[0m" 302 -
+2025-06-17 23:47:21,098 - INFO - 172.18.0.1 - - [17/Jun/2025 23:47:21] "GET /professores_view HTTP/1.1" 200 -
+2025-06-17 23:47:23,557 - INFO - 172.18.0.1 - - [17/Jun/2025 23:47:23] "GET /alunos_view HTTP/1.1" 200 -
+2025-06-17 23:47:29,522 - INFO - 172.18.0.1 - - [17/Jun/2025 23:47:29] "GET /turmas_view HTTP/1.1" 200 -
+2025-06-17 23:47:32,805 - INFO - 172.18.0.1 - - [17/Jun/2025 23:47:32] "GET /turmas/1/edit HTTP/1.1" 200 -
+2025-06-17 23:47:37,226 - INFO - UPDATE: Turma com ID 1 atualizada com sucesso via formulário.

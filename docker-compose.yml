@@ -57,8 +57,10 @@ services:
       - db
     environment:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/escola
+      FLASK_APP: app.py
+      FLASK_ENV: development
     ports:
-      - "5000:5000"
+      - "5001:5000"
     volumes:
       - ./app:/app
     networks:

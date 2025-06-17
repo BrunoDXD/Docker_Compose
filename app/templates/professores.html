@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professores - Escola Infantil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .menu {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .menu a {
+            margin: 0 10px;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .menu a:hover {
+            background-color: #2980b9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .btn {
+            padding: 5px 10px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+        .btn-warning {
+            background-color: #f39c12;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Professores - Escola Infantil</h1>
+        
+        <div class="menu">
+            <a href="/">Início</a>
+            <a href="/turmas_view">Turmas</a>
+            <a href="/professores_view">Professores</a>
+            <a href="/alunos_view">Alunos</a>
+            <a href="/pagamentos_view">Pagamentos</a>
+            <a href="/atividades_view">Atividades</a>
+        </div>
+        
+        <h2>Lista de Professores</h2>
+        
+        <div style="margin-bottom: 20px; text-align: right;">
+            <a href="/professores/novo" class="btn" style="background-color: #2ecc71;">Novo Professor</a>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome Completo</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for professor in professores %}
+                <tr>
+                    <td>{{ professor.id_professor }}</td>
+                    <td>{{ professor.nome_completo }}</td>
+                    <td>{{ professor.email }}</td>
+                    <td>{{ professor.telefone }}</td>
+                    <td>
+                        <a href="/professores/{{ professor.id_professor }}/edit" class="btn btn-warning">Editar</a>
+                        <a href="/professores/{{ professor.id_professor }}/delete" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este professor?')">Excluir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
