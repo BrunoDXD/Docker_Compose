@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alunos Participantes - Escola Infantil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .menu {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .menu a {
+            margin: 0 10px;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .menu a:hover {
+            background-color: #2980b9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .btn {
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .atividade-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .atividade-info p {
+            margin: 5px 0;
+        }
+        .no-alunos {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Alunos Participantes</h1>
+        
+        <div class="menu">
+            <a href="/">Início</a>
+            <a href="/turmas_view">Turmas</a>
+            <a href="/professores_view">Professores</a>
+            <a href="/alunos_view">Alunos</a>
+            <a href="/pagamentos_view">Pagamentos</a>
+            <a href="/atividades_view">Atividades</a>
+        </div>
+        
+        <div class="atividade-info">
+            <h2>Informações da Atividade</h2>
+            <p><strong>ID:</strong> {{ atividade.id_atividade }}</p>
+            <p><strong>Descrição:</strong> {{ atividade.descricao }}</p>
+            <p><strong>Data de Realização:</strong> {{ atividade.data_realizacao }}</p>
+        </div>
+        
+        {% if alunos %}
+        <h2>Lista de Alunos Participantes</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome Completo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for aluno in alunos %}
+                <tr>
+                    <td>{{ aluno.id_aluno }}</td>
+                    <td>{{ aluno.nome_completo }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="no-alunos">
+            <p>Não há alunos participantes nesta atividade.</p>
+        </div>
+        {% endif %}
+        
+        <div style="text-align: center;">
+            <a href="/atividades_view" class="btn">Voltar para Atividades</a>
+        </div>
+    </div>
+</body>
+</html>

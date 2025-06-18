@@ -104,7 +104,8 @@ class Atividade(db.Model):
         return {
             'id_atividade': self.id_atividade,
             'descricao': self.descricao,
-            'data_realizacao': self.data_realizacao.strftime('%Y-%m-%d') if self.data_realizacao else None
+            'data_realizacao': self.data_realizacao.strftime('%Y-%m-%d') if self.data_realizacao else None,
+            'alunos': [{'id_aluno': aluno.id_aluno, 'nome_completo': aluno.nome_completo} for aluno in self.alunos]
         }
 
 class AtividadeAluno(db.Model):

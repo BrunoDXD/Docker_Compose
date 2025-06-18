@@ -26,9 +26,9 @@ try:
 except Exception as e:
     logger.error(f"Erro ao criar tabelas do banco de dados: {e}")
 
-# Rota raiz
-@app.route('/')
-def index():
+# Rota para API
+@app.route('/api')
+def api_index():
     return jsonify({
         "message": "API da Escola Infantil",
         "endpoints": {
@@ -877,6 +877,21 @@ def atividades_view():
     except Exception as e:
         logger.error(f'ERROR: Falha ao renderizar página de atividades - {e}')
         return render_template('error.html', error='Falha ao carregar a página de atividades')
+
+@app.route('/atividades/<atividade_id>/alunos')
+def alunos_atividade(atividade_id):
+    try:
+        atividade = Atividade.query.get(atividade_id)
+        if not atividade:
+            logger.warning(f'READ: Atividade com ID {atividade_id} não encontrada.')
+            return render_template('error.html', error='Atividade não encontrada')
+        
+        alunos = atividade.alunos
+        logger.info(f'READ: Listagem de alunos da atividade com ID {atividade_id} solicitada.')
+        return render_template('alunos_atividade.html', atividade=atividade, alunos=alunos)
+    except Exception as e:
+        logger.error(f'ERROR: Falha ao listar alunos da atividade com ID {atividade_id} - {e}')
+        return render_template('error.html', error='Falha ao listar alunos da atividade')
 
 @app.route('/atividades/nova', methods=['GET', 'POST'])
 def nova_atividade():

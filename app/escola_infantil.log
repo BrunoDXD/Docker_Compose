@@ -1,9 +1,11 @@
-2025-06-17 23:48:39,168 - INFO - DELETE: Pagamento com ID 11 removido com sucesso via interface web.
-2025-06-17 23:48:39,207 - INFO - 172.18.0.1 - - [17/Jun/2025 23:48:39] "[32mGET /pagamentos/11/delete HTTP/1.1[0m" 302 -
-2025-06-17 23:48:39,227 - INFO - 172.18.0.1 - - [17/Jun/2025 23:48:39] "GET /pagamentos_view HTTP/1.1" 200 -
-2025-06-17 23:48:40,570 - INFO - 172.18.0.1 - - [17/Jun/2025 23:48:40] "GET /atividades_view HTTP/1.1" 200 -
-2025-06-17 23:48:43,141 - INFO - 172.18.0.1 - - [17/Jun/2025 23:48:43] "[33mGET /atividades/1/alunos HTTP/1.1[0m" 404 -
-2025-06-17 23:48:54,279 - INFO - 172.18.0.1 - - [17/Jun/2025 23:48:54] "GET /atividades/nova HTTP/1.1" 200 -
-2025-06-17 23:49:07,686 - INFO - CREATE: Atividade teste inserida com sucesso via formulário.
-2025-06-17 23:49:07,688 - INFO - 172.18.0.1 - - [17/Jun/2025 23:49:07] "[32mPOST /atividades/nova HTTP/1.1[0m" 302 -
-2025-06-17 23:49:07,709 - INFO - 172.18.0.1 - - [17/Jun/2025 23:49:07] "GET /atividades_view HTTP/1.1" 200 -
+2025-06-18 00:03:45,166 - INFO - 172.18.0.1 - - [18/Jun/2025 00:03:45] "GET /alunos_view HTTP/1.1" 200 -
+2025-06-18 00:03:46,865 - INFO - 172.18.0.1 - - [18/Jun/2025 00:03:46] "GET /pagamentos_view HTTP/1.1" 200 -
+2025-06-18 00:03:47,931 - INFO - 172.18.0.1 - - [18/Jun/2025 00:03:47] "GET /atividades_view HTTP/1.1" 200 -
+2025-06-18 00:03:50,459 - INFO - 172.18.0.1 - - [18/Jun/2025 00:03:50] "GET /turmas_view HTTP/1.1" 200 -
+2025-06-18 00:03:51,708 - INFO - 172.18.0.1 - - [18/Jun/2025 00:03:51] "GET / HTTP/1.1" 200 -
+2025-06-18 00:03:52,655 - INFO - 172.18.0.1 - - [18/Jun/2025 00:03:52] "GET /turmas_view HTTP/1.1" 200 -
+2025-06-18 00:03:53,219 - INFO - 172.18.0.1 - - [18/Jun/2025 00:03:53] "GET /professores_view HTTP/1.1" 200 -
+2025-06-18 00:03:54,021 - INFO - 172.18.0.1 - - [18/Jun/2025 00:03:54] "GET /alunos_view HTTP/1.1" 200 -
+2025-06-18 00:03:54,845 - INFO - 172.18.0.1 - - [18/Jun/2025 00:03:54] "GET /pagamentos_view HTTP/1.1" 200 -
+2025-06-18 00:03:55,497 - INFO - 172.18.0.1 - - [18/Jun/2025 00:03:55] "GET /atividades_view HTTP/1.1" 200 -
+2025-06-18 00:03:57,152 - INFO - 172.18.0.1 - - [18/Jun/2025 00:03:57] "GET / HTTP/1.1" 200 -
