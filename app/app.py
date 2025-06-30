@@ -1,6 +1,7 @@
 import logging
 from logging.handlers import RotatingFileHandler
 from flask import Flask, request, jsonify, render_template, redirect
+from flask_restx import Api, Resource, fields
 from models import db, Turma, Professor, Aluno, Pagamento, Presenca, Atividade, AtividadeAluno, Usuario
 from config import Config
 from datetime import datetime
@@ -17,6 +18,58 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
+
+# Configuração do Swagger
+api = Api(app, 
+    version='1.0', 
+    title='API Escola Infantil',
+    description='Sistema de Gestão para Escola Infantil',
+    doc='/swagger/'
+)
+
+# Namespaces
+ns_professores = api.namespace('professores', description='Operações com professores')
+ns_turmas = api.namespace('turmas', description='Operações com turmas')
+ns_alunos = api.namespace('alunos', description='Operações com alunos')
+ns_pagamentos = api.namespace('pagamentos', description='Operações com pagamentos')
+ns_atividades = api.namespace('atividades', description='Operações com atividades')
+
+# Modelos Swagger
+professor_model = api.model('Professor', {
+    'nome_completo': fields.String(required=True, description='Nome completo do professor'),
+    'email': fields.String(required=True, description='Email do professor'),
+    'telefone': fields.String(required=True, description='Telefone do professor')
+})
+
+turma_model = api.model('Turma', {
+    'nome_turma': fields.String(required=True, description='Nome da turma'),
+    'id_professor': fields.Integer(required=True, description='ID do professor'),
+    'horario': fields.String(required=True, description='Horário da turma')
+})
+
+aluno_model = api.model('Aluno', {
+    'nome_completo': fields.String(required=True, description='Nome completo do aluno'),
+    'data_nascimento': fields.String(required=True, description='Data de nascimento (YYYY-MM-DD)'),
+    'id_turma': fields.Integer(required=True, description='ID da turma'),
+    'nome_responsavel': fields.String(required=True, description='Nome do responsável'),
+    'telefone_responsavel': fields.String(required=True, description='Telefone do responsável'),
+    'email_responsavel': fields.String(required=True, description='Email do responsável'),
+    'informacoes_adicionais': fields.String(description='Informações adicionais')
+})
+
+pagamento_model = api.model('Pagamento', {
+    'id_aluno': fields.Integer(required=True, description='ID do aluno'),
+    'data_pagamento': fields.String(required=True, description='Data do pagamento (YYYY-MM-DD)'),
+    'valor_pago': fields.Float(required=True, description='Valor pago'),
+    'forma_pagamento': fields.String(required=True, description='Forma de pagamento'),
+    'referencia': fields.String(required=True, description='Referência do pagamento'),
+    'status': fields.String(required=True, description='Status do pagamento')
+})
+
+atividade_model = api.model('Atividade', {
+    'descricao': fields.String(required=True, description='Descrição da atividade'),
+    'data_realizacao': fields.String(required=True, description='Data de realização (YYYY-MM-DD)')
+})
 
 # Inicialização do banco de dados com tratamento de erro
 try:
@@ -41,176 +94,226 @@ def api_index():
         }
     })
 
-# Rotas para Professores
-@app.route('/professores', methods=['GET'])
-def listar_professores():
-    try:
-        professores = Professor.query.all()
-        logger.info('READ: Listagem de todos os professores solicitada.')
-        return jsonify([professor.to_dict() for professor in professores])
-    except Exception as e:
-        logger.error(f'ERROR: Falha ao listar professores - {e}')
-        return jsonify({'error': 'Falha ao listar professores'}), 500
+# Rotas para Professores com Swagger
+@ns_professores.route('/')
+class ProfessoresList(Resource):
+    @ns_professores.doc('listar_professores')
+    def get(self):
+        """Lista todos os professores"""
+        try:
+            professores = Professor.query.all()
+            logger.info('READ: Listagem de todos os professores solicitada.')
+            return [professor.to_dict() for professor in professores]
+        except Exception as e:
+            logger.error(f'ERROR: Falha ao listar professores - {e}')
+            return {'error': 'Falha ao listar professores'}, 500
+    
+    @ns_professores.doc('cadastrar_professor')
+    @ns_professores.expect(professor_model)
+    def post(self):
+        """Cadastra um novo professor"""
+        try:
+            dados = request.json
+            professor = Professor(
+                nome_completo=dados['nome_completo'],
+                email=dados['email'],
+                telefone=dados['telefone']
+            )
+            db.session.add(professor)
+            db.session.commit()
+            logger.info(f'CREATE: Professor {professor.nome_completo} inserido com sucesso.')
+            return professor.to_dict(), 201
+        except Exception as e:
+            logger.error(f'ERROR: Falha ao cadastrar professor - {e}')
+            return {'error': 'Falha ao cadastrar professor'}, 500
 
-@app.route('/professores/<professor_id>', methods=['GET'])
-def obter_professor(professor_id):
-    try:
-        professor = Professor.query.get(professor_id)
-        if not professor:
-            logger.warning(f'READ: Professor com ID {professor_id} não encontrado.')
-            return jsonify({'error': 'Professor não encontrado'}), 404
-        logger.info(f'READ: Professor com ID {professor_id} encontrado.')
-        return jsonify(professor.to_dict())
-    except Exception as e:
-        logger.error(f'ERROR: Falha ao obter professor com ID {professor_id} - {e}')
-        return jsonify({'error': 'Falha ao obter professor'}), 500
+@ns_professores.route('/<int:professor_id>')
+class ProfessorResource(Resource):
+    @ns_professores.doc('obter_professor')
+    def get(self, professor_id):
+        """Obtém um professor por ID"""
+        try:
+            professor = Professor.query.get(professor_id)
+            if not professor:
+                logger.warning(f'READ: Professor com ID {professor_id} não encontrado.')
+                return {'error': 'Professor não encontrado'}, 404
+            logger.info(f'READ: Professor com ID {professor_id} encontrado.')
+            return professor.to_dict()
+        except Exception as e:
+            logger.error(f'ERROR: Falha ao obter professor com ID {professor_id} - {e}')
+            return {'error': 'Falha ao obter professor'}, 500
+    
+    @ns_professores.doc('atualizar_professor')
+    @ns_professores.expect(professor_model)
+    def put(self, professor_id):
+        """Atualiza um professor"""
+        try:
+            professor = Professor.query.get(professor_id)
+            if not professor:
+                logger.warning(f'UPDATE: Professor com ID {professor_id} não encontrado.')
+                return {'error': 'Professor não encontrado'}, 404
+            
+            dados = request.json
+            if 'nome_completo' in dados:
+                professor.nome_completo = dados['nome_completo']
+            if 'email' in dados:
+                professor.email = dados['email']
+            if 'telefone' in dados:
+                professor.telefone = dados['telefone']
+            
+            db.session.commit()
+            logger.info(f'UPDATE: Professor com ID {professor_id} atualizado com sucesso.')
+            return professor.to_dict()
+        except Exception as e:
+            logger.error(f'ERROR: Falha ao atualizar professor com ID {professor_id} - {e}')
+            return {'error': 'Falha ao atualizar professor'}, 500
+    
+    @ns_professores.doc('excluir_professor')
+    def delete(self, professor_id):
+        """Exclui um professor"""
+        try:
+            professor = Professor.query.get(professor_id)
+            if not professor:
+                logger.warning(f'DELETE: Professor com ID {professor_id} não encontrado.')
+                return {'error': 'Professor não encontrado'}, 404
+            
+            db.session.delete(professor)
+            db.session.commit()
+            logger.info(f'DELETE: Professor com ID {professor_id} removido com sucesso.')
+            return '', 204
+        except Exception as e:
+            logger.error(f'ERROR: Falha ao excluir professor com ID {professor_id} - {e}')
+            return {'error': 'Falha ao excluir professor'}, 500
 
-@app.route('/professores', methods=['POST'])
-def cadastrar_professor():
-    try:
-        dados = request.json
-        professor = Professor(
-            nome_completo=dados['nome_completo'],
-            email=dados['email'],
-            telefone=dados['telefone']
-        )
-        db.session.add(professor)
-        db.session.commit()
-        logger.info(f'CREATE: Professor {professor.nome_completo} inserido com sucesso.')
-        return jsonify(professor.to_dict()), 201
-    except Exception as e:
-        logger.error(f'ERROR: Falha ao cadastrar professor - {e}')
-        return jsonify({'error': 'Falha ao cadastrar professor'}), 500
+# Rotas para Turmas com Swagger
+@ns_turmas.route('/')
+class TurmasList(Resource):
+    @ns_turmas.doc('listar_turmas')
+    def get(self):
+        """Lista todas as turmas"""
+        try:
+            turmas = Turma.query.all()
+            logger.info('READ: Listagem de todas as turmas solicitada.')
+            return [turma.to_dict() for turma in turmas]
+        except Exception as e:
+            logger.error(f'ERROR: Falha ao listar turmas - {e}')
+            return {'error': 'Falha ao listar turmas'}, 500
+    
+    @ns_turmas.doc('cadastrar_turma')
+    @ns_turmas.expect(turma_model)
+    def post(self):
+        """Cadastra uma nova turma"""
+        try:
+            dados = request.json
+            turma = Turma(
+                nome_turma=dados['nome_turma'],
+                id_professor=dados['id_professor'],
+                horario=dados['horario']
+            )
+            db.session.add(turma)
+            db.session.commit()
+            logger.info(f'CREATE: Turma {turma.nome_turma} inserida com sucesso.')
+            return turma.to_dict(), 201
+        except Exception as e:
+            logger.error(f'ERROR: Falha ao cadastrar turma - {e}')
+            return {'error': 'Falha ao cadastrar turma'}, 500
 
-@app.route('/professores/<professor_id>', methods=['PUT'])
-def atualizar_professor(professor_id):
-    try:
-        professor = Professor.query.get(professor_id)
-        if not professor:
-            logger.warning(f'UPDATE: Professor com ID {professor_id} não encontrado.')
-            return jsonify({'error': 'Professor não encontrado'}), 404
-        
-        dados = request.json
-        if 'nome_completo' in dados:
-            professor.nome_completo = dados['nome_completo']
-        if 'email' in dados:
-            professor.email = dados['email']
-        if 'telefone' in dados:
-            professor.telefone = dados['telefone']
-        
-        db.session.commit()
-        logger.info(f'UPDATE: Professor com ID {professor_id} atualizado com sucesso.')
-        return jsonify(professor.to_dict())
-    except Exception as e:
-        logger.error(f'ERROR: Falha ao atualizar professor com ID {professor_id} - {e}')
-        return jsonify({'error': 'Falha ao atualizar professor'}), 500
+@ns_turmas.route('/<int:turma_id>')
+class TurmaResource(Resource):
+    @ns_turmas.doc('obter_turma')
+    def get(self, turma_id):
+        """Obtém uma turma por ID"""
+        try:
+            turma = Turma.query.get(turma_id)
+            if not turma:
+                logger.warning(f'READ: Turma com ID {turma_id} não encontrada.')
+                return {'error': 'Turma não encontrada'}, 404
+            logger.info(f'READ: Turma com ID {turma_id} encontrada.')
+            return turma.to_dict()
+        except Exception as e:
+            logger.error(f'ERROR: Falha ao obter turma com ID {turma_id} - {e}')
+            return {'error': 'Falha ao obter turma'}, 500
+    
+    @ns_turmas.doc('atualizar_turma')
+    @ns_turmas.expect(turma_model)
+    def put(self, turma_id):
+        """Atualiza uma turma"""
+        try:
+            turma = Turma.query.get(turma_id)
+            if not turma:
+                logger.warning(f'UPDATE: Turma com ID {turma_id} não encontrada.')
+                return {'error': 'Turma não encontrada'}, 404
+            
+            dados = request.json
+            if 'nome_turma' in dados:
+                turma.nome_turma = dados['nome_turma']
+            if 'id_professor' in dados:
+                turma.id_professor = dados['id_professor']
+            if 'horario' in dados:
+                turma.horario = dados['horario']
+            
+            db.session.commit()
+            logger.info(f'UPDATE: Turma com ID {turma_id} atualizada com sucesso.')
+            return turma.to_dict()
+        except Exception as e:
+            logger.error(f'ERROR: Falha ao atualizar turma com ID {turma_id} - {e}')
+            return {'error': 'Falha ao atualizar turma'}, 500
+    
+    @ns_turmas.doc('excluir_turma')
+    def delete(self, turma_id):
+        """Exclui uma turma"""
+        try:
+            turma = Turma.query.get(turma_id)
+            if not turma:
+                logger.warning(f'DELETE: Turma com ID {turma_id} não encontrada.')
+                return {'error': 'Turma não encontrada'}, 404
+            
+            db.session.delete(turma)
+            db.session.commit()
+            logger.info(f'DELETE: Turma com ID {turma_id} removida com sucesso.')
+            return '', 204
+        except Exception as e:
+            logger.error(f'ERROR: Falha ao excluir turma com ID {turma_id} - {e}')
+            return {'error': 'Falha ao excluir turma'}, 500
 
-@app.route('/professores/<professor_id>', methods=['DELETE'])
-def excluir_professor(professor_id):
-    try:
-        professor = Professor.query.get(professor_id)
-        if not professor:
-            logger.warning(f'DELETE: Professor com ID {professor_id} não encontrado.')
-            return jsonify({'error': 'Professor não encontrado'}), 404
-        
-        db.session.delete(professor)
-        db.session.commit()
-        logger.info(f'DELETE: Professor com ID {professor_id} removido com sucesso.')
-        return '', 204
-    except Exception as e:
-        logger.error(f'ERROR: Falha ao excluir professor com ID {professor_id} - {e}')
-        return jsonify({'error': 'Falha ao excluir professor'}), 500
-
-# Rotas para Turmas
-@app.route('/turmas', methods=['GET'])
-def listar_turmas():
-    try:
-        turmas = Turma.query.all()
-        logger.info('READ: Listagem de todas as turmas solicitada.')
-        return jsonify([turma.to_dict() for turma in turmas])
-    except Exception as e:
-        logger.error(f'ERROR: Falha ao listar turmas - {e}')
-        return jsonify({'error': 'Falha ao listar turmas'}), 500
-
-@app.route('/turmas/<turma_id>', methods=['GET'])
-def obter_turma(turma_id):
-    try:
-        turma = Turma.query.get(turma_id)
-        if not turma:
-            logger.warning(f'READ: Turma com ID {turma_id} não encontrada.')
-            return jsonify({'error': 'Turma não encontrada'}), 404
-        logger.info(f'READ: Turma com ID {turma_id} encontrada.')
-        return jsonify(turma.to_dict())
-    except Exception as e:
-        logger.error(f'ERROR: Falha ao obter turma com ID {turma_id} - {e}')
-        return jsonify({'error': 'Falha ao obter turma'}), 500
-
-@app.route('/turmas', methods=['POST'])
-def cadastrar_turma():
-    try:
-        dados = request.json
-        turma = Turma(
-            nome_turma=dados['nome_turma'],
-            id_professor=dados['id_professor'],
-            horario=dados['horario']
-        )
-        db.session.add(turma)
-        db.session.commit()
-        logger.info(f'CREATE: Turma {turma.nome_turma} inserida com sucesso.')
-        return jsonify(turma.to_dict()), 201
-    except Exception as e:
-        logger.error(f'ERROR: Falha ao cadastrar turma - {e}')
-        return jsonify({'error': 'Falha ao cadastrar turma'}), 500
-
-@app.route('/turmas/<turma_id>', methods=['PUT'])
-def atualizar_turma(turma_id):
-    try:
-        turma = Turma.query.get(turma_id)
-        if not turma:
-            logger.warning(f'UPDATE: Turma com ID {turma_id} não encontrada.')
-            return jsonify({'error': 'Turma não encontrada'}), 404
-        
-        dados = request.json
-        if 'nome_turma' in dados:
-            turma.nome_turma = dados['nome_turma']
-        if 'id_professor' in dados:
-            turma.id_professor = dados['id_professor']
-        if 'horario' in dados:
-            turma.horario = dados['horario']
-        
-        db.session.commit()
-        logger.info(f'UPDATE: Turma com ID {turma_id} atualizada com sucesso.')
-        return jsonify(turma.to_dict())
-    except Exception as e:
-        logger.error(f'ERROR: Falha ao atualizar turma com ID {turma_id} - {e}')
-        return jsonify({'error': 'Falha ao atualizar turma'}), 500
-
-@app.route('/turmas/<turma_id>', methods=['DELETE'])
-def excluir_turma(turma_id):
-    try:
-        turma = Turma.query.get(turma_id)
-        if not turma:
-            logger.warning(f'DELETE: Turma com ID {turma_id} não encontrada.')
-            return jsonify({'error': 'Turma não encontrada'}), 404
-        
-        db.session.delete(turma)
-        db.session.commit()
-        logger.info(f'DELETE: Turma com ID {turma_id} removida com sucesso.')
-        return '', 204
-    except Exception as e:
-        logger.error(f'ERROR: Falha ao excluir turma com ID {turma_id} - {e}')
-        return jsonify({'error': 'Falha ao excluir turma'}), 500
-
-# Rotas para Alunos
-@app.route('/alunos', methods=['GET'])
-def listar_alunos():
-    try:
-        alunos = Aluno.query.all()
-        logger.info('READ: Listagem de todos os alunos solicitada.')
-        return jsonify([aluno.to_dict() for aluno in alunos])
-    except Exception as e:
-        logger.error(f'ERROR: Falha ao listar alunos - {e}')
-        return jsonify({'error': 'Falha ao listar alunos'}), 500
+# Rotas para Alunos com Swagger
+@ns_alunos.route('/')
+class AlunosList(Resource):
+    @ns_alunos.doc('listar_alunos')
+    def get(self):
+        """Lista todos os alunos"""
+        try:
+            alunos = Aluno.query.all()
+            logger.info('READ: Listagem de todos os alunos solicitada.')
+            return [aluno.to_dict() for aluno in alunos]
+        except Exception as e:
+            logger.error(f'ERROR: Falha ao listar alunos - {e}')
+            return {'error': 'Falha ao listar alunos'}, 500
+    
+    @ns_alunos.doc('cadastrar_aluno')
+    @ns_alunos.expect(aluno_model)
+    def post(self):
+        """Cadastra um novo aluno"""
+        try:
+            dados = request.json
+            data_nascimento = datetime.strptime(dados['data_nascimento'], '%Y-%m-%d').date() if 'data_nascimento' in dados else None
+            
+            aluno = Aluno(
+                nome_completo=dados['nome_completo'],
+                data_nascimento=data_nascimento,
+                id_turma=dados['id_turma'],
+                nome_responsavel=dados['nome_responsavel'],
+                telefone_responsavel=dados['telefone_responsavel'],
+                email_responsavel=dados['email_responsavel'],
+                informacoes_adicionais=dados.get('informacoes_adicionais')
+            )
+            db.session.add(aluno)
+            db.session.commit()
+            logger.info(f'CREATE: Aluno {aluno.nome_completo} inserido com sucesso.')
+            return aluno.to_dict(), 201
+        except Exception as e:
+            logger.error(f'ERROR: Falha ao cadastrar aluno - {e}')
+            return {'error': 'Falha ao cadastrar aluno'}, 500
 
 @app.route('/alunos/<aluno_id>', methods=['GET'])
 def obter_aluno(aluno_id):
@@ -295,16 +398,43 @@ def excluir_aluno(aluno_id):
         logger.error(f'ERROR: Falha ao excluir aluno com ID {aluno_id} - {e}')
         return jsonify({'error': 'Falha ao excluir aluno'}), 500
 
-# Rotas para Pagamentos
-@app.route('/pagamentos', methods=['GET'])
-def listar_pagamentos():
-    try:
-        pagamentos = Pagamento.query.all()
-        logger.info('READ: Listagem de todos os pagamentos solicitada.')
-        return jsonify([pagamento.to_dict() for pagamento in pagamentos])
-    except Exception as e:
-        logger.error(f'ERROR: Falha ao listar pagamentos - {e}')
-        return jsonify({'error': 'Falha ao listar pagamentos'}), 500
+# Rotas para Pagamentos com Swagger
+@ns_pagamentos.route('/')
+class PagamentosList(Resource):
+    @ns_pagamentos.doc('listar_pagamentos')
+    def get(self):
+        """Lista todos os pagamentos"""
+        try:
+            pagamentos = Pagamento.query.all()
+            logger.info('READ: Listagem de todos os pagamentos solicitada.')
+            return [pagamento.to_dict() for pagamento in pagamentos]
+        except Exception as e:
+            logger.error(f'ERROR: Falha ao listar pagamentos - {e}')
+            return {'error': 'Falha ao listar pagamentos'}, 500
+    
+    @ns_pagamentos.doc('cadastrar_pagamento')
+    @ns_pagamentos.expect(pagamento_model)
+    def post(self):
+        """Cadastra um novo pagamento"""
+        try:
+            dados = request.json
+            data_pagamento = datetime.strptime(dados['data_pagamento'], '%Y-%m-%d').date() if 'data_pagamento' in dados else None
+            
+            pagamento = Pagamento(
+                id_aluno=dados['id_aluno'],
+                data_pagamento=data_pagamento,
+                valor_pago=dados['valor_pago'],
+                forma_pagamento=dados['forma_pagamento'],
+                referencia=dados['referencia'],
+                status=dados['status']
+            )
+            db.session.add(pagamento)
+            db.session.commit()
+            logger.info(f'CREATE: Pagamento para aluno ID {pagamento.id_aluno} inserido com sucesso.')
+            return pagamento.to_dict(), 201
+        except Exception as e:
+            logger.error(f'ERROR: Falha ao cadastrar pagamento - {e}')
+            return {'error': 'Falha ao cadastrar pagamento'}, 500
 
 @app.route('/pagamentos/<pagamento_id>', methods=['GET'])
 def obter_pagamento(pagamento_id):
@@ -468,16 +598,39 @@ def excluir_presenca(presenca_id):
         logger.error(f'ERROR: Falha ao excluir presença com ID {presenca_id} - {e}')
         return jsonify({'error': 'Falha ao excluir presença'}), 500
 
-# Rotas para Atividades
-@app.route('/atividades', methods=['GET'])
-def listar_atividades():
-    try:
-        atividades = Atividade.query.all()
-        logger.info('READ: Listagem de todas as atividades solicitada.')
-        return jsonify([atividade.to_dict() for atividade in atividades])
-    except Exception as e:
-        logger.error(f'ERROR: Falha ao listar atividades - {e}')
-        return jsonify({'error': 'Falha ao listar atividades'}), 500
+# Rotas para Atividades com Swagger
+@ns_atividades.route('/')
+class AtividadesList(Resource):
+    @ns_atividades.doc('listar_atividades')
+    def get(self):
+        """Lista todas as atividades"""
+        try:
+            atividades = Atividade.query.all()
+            logger.info('READ: Listagem de todas as atividades solicitada.')
+            return [atividade.to_dict() for atividade in atividades]
+        except Exception as e:
+            logger.error(f'ERROR: Falha ao listar atividades - {e}')
+            return {'error': 'Falha ao listar atividades'}, 500
+    
+    @ns_atividades.doc('cadastrar_atividade')
+    @ns_atividades.expect(atividade_model)
+    def post(self):
+        """Cadastra uma nova atividade"""
+        try:
+            dados = request.json
+            data_realizacao = datetime.strptime(dados['data_realizacao'], '%Y-%m-%d').date() if 'data_realizacao' in dados else None
+            
+            atividade = Atividade(
+                descricao=dados['descricao'],
+                data_realizacao=data_realizacao
+            )
+            db.session.add(atividade)
+            db.session.commit()
+            logger.info(f'CREATE: Atividade {atividade.descricao} inserida com sucesso.')
+            return atividade.to_dict(), 201
+        except Exception as e:
+            logger.error(f'ERROR: Falha ao cadastrar atividade - {e}')
+            return {'error': 'Falha ao cadastrar atividade'}, 500
 
 @app.route('/atividades/<atividade_id>', methods=['GET'])
 def obter_atividade(atividade_id):
